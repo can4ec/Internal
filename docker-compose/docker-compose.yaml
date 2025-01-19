@@ -16,49 +16,51 @@ services:
       - zookeeper
     ports:
       - 29092:29092
+      - 9092:9092
     hostname: kafka
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
-
+      KAFKA_LISTENERS: INTERNAL://:29092,OUTSIDE://:9092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:29092,OUTSIDE://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
   kafka-ui:
     image: provectuslabs/kafka-ui
     container_name: kafka-ui
+    hostname: kafka-ui
     ports:
       - 8090:8080
     restart: always
     environment:
       - KAFKA_CLUSTERS_0_NAME=local
-      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:29092,kafka2:29093
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:29092
       - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
     links:
       - kafka
       - zookeeper
 
-  postgres:
-    image: postgres
-    restart: always
-    # set shared memory limit when using docker-compose
-    shm_size: 128mb
-    # or set shared memory limit when deploy via swarm stack
-    volumes:
-      - ./db/init-db.sql:/docker-entrypoint-initdb.d/init.sql
-    #volumes:
-    #  - type: tmpfs
-    #    target: /dev/shm
-    #    tmpfs:
-    #      size: 134217728 # 128*2^20 bytes = 128Mb
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
+#  postgres:
+#    image: postgres
+#    restart: always
+#    # set shared memory limit when using docker-compose
+#    shm_size: 128mb
+#    # or set shared memory limit when deploy via swarm stack
+#    volumes:
+#      - ./db/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+#    #volumes:
+#    #  - type: tmpfs
+#    #    target: /dev/shm
+#    #    tmpfs:
+#    #      size: 134217728 # 128*2^20 bytes = 128Mb
+#    environment:
+#      POSTGRES_USER: admin
+#      POSTGRES_PASSWORD: admin
+#
+#  adminer:
+#    image: adminer
+#    restart: always
+#    ports:
+#      - 8080:8080

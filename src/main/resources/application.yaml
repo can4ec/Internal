@@ -1,0 +1,15 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: demo
+  kafka:
+    bootstrap-servers: "localhost:9092"
+
+server:
+  port: 8500
+
+
+demo:
+  kafka:
+    bootstrap-servers: "localhost:9092"
