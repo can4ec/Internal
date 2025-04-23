@@ -3,13 +3,16 @@ spring:
     allow-bean-definition-overriding: true
   application:
     name: demo
-  kafka:
-    bootstrap-servers: "localhost:9092"
 
 server:
   port: 8500
 
-
+---
+spring.config.activate.on-profile: kafka
 demo:
   kafka:
     bootstrap-servers: "localhost:9092"
+
+
+---
+spring.config.activate.on-profile: "test-profile"

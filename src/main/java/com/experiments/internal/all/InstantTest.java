@@ -1,5 +1,8 @@
 package com.experiments.internal.all;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
+import org.springframework.boot.autoconfigure.cache.CacheProperties;
+
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -35,6 +38,7 @@ public class InstantTest {
                 withZone(ZoneId.systemDefault()).format(Instant.now());
         System.out.println(out);
 
+        Caffeine.newBuilder().ticker()
 
     }
 }
