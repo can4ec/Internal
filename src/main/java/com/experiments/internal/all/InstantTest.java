@@ -38,7 +38,5 @@ public class InstantTest {
                 withZone(ZoneId.systemDefault()).format(Instant.now());
         System.out.println(out);
 
-        Caffeine.newBuilder().ticker()
-
     }
 }
